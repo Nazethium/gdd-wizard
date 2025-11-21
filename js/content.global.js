@@ -176,7 +176,7 @@
             let output = '';
 
             if (r && m) {
-                output = `<p><strong>${parseMarkdown(m)}</strong>: ${parseMarkdown(r)}</p>`;
+                output = `<p><strong>${parseMarkdown(m)}</strong>${parseMarkdown(r)}</p>`;
             } else {
                 // If only one field is filled, show just that field
                 output = `<p>${parseMarkdown(r || m || '—')}</p>`;
