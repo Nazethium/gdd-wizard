@@ -169,15 +169,25 @@
             if (fb) return `<p>${parseMarkdown(fb)}</p>`;
             return '<p>—</p>';
         }
-        // Each team member gets their own paragraph, format: "Member - Role"
-        return items.map(it => {
+        // Format: "Member: Role" with separator lines between entries
+        return items.map((it, index) => {
             const r = String(it.role||'').trim();
             const m = String(it.member||'').trim();
+            let output = '';
+
             if (r && m) {
-                return `<p><strong>${parseMarkdown(m)}</strong> - ${parseMarkdown(r)}</p>`;
+                output = `<p><strong>${parseMarkdown(m)}</strong>: ${parseMarkdown(r)}</p>`;
+            } else {
+                // If only one field is filled, show just that field
+                output = `<p>${parseMarkdown(r || m || '—')}</p>`;
             }
-            // If only one field is filled, show just that field
-            return `<p>${parseMarkdown(r || m || '—')}</p>`;
+
+            // Add horizontal rule separator between entries (but not after the last one)
+            if (index < items.length - 1) {
+                output += '<hr class="team-separator">';
+            }
+
+            return output;
         }).join('');
     }
     
