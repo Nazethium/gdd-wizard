@@ -198,6 +198,7 @@ Modifications in this fork are provided as-is for educational purposes.
 - **Original Tool**: Studio-Erza - For creating the excellent GDD Wizard
 - **Markdown Library**: [Marked.js](https://marked.js.org/) by Christopher Jeffrey and contributors
 - **Markdown Enhancement**: Community-driven improvement for better document formatting
+- **Documentation**: README formatting and layout assistance by [Claude Code](https://claude.ai/claude-code) (Anthropic)
 
 ---
 
