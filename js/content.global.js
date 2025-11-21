@@ -102,7 +102,8 @@
     const wrapPerLine = (typeof rules.labelMax === 'number' && isFinite(rules.labelMax)) ? rules.labelMax : DIAGRAM_LINE_LIMIT;
     const svg = showDiagram ? svgForCoreLoop(steps, { lineMax: wrapPerLine }, theme) : '';
     const overview = `<h3>export.loopOverview</h3><p>${escapeHtml(loopOverviewAuto(d))}</p>`;
-    const example = d.exampleSession ? `<h3>export.exampleSession</h3><p>${escapeHtml(d.exampleSession)}</p>` : '';
+    // const example = d.exampleSession ? `<h3>export.exampleSession</h3><p>${escapeHtml(d.exampleSession)}</p>` : ''; -- ORIGINAL
+    const example = d.exampleSession ? `<h3>export.exampleSession</h3><p>${parseMarkdown(d.exampleSession)}</p>` : '';
     const diagram = `<div class="loop-flex-spacer"></div><div class="loop-diagram"><div class="loop-diagram-inner" style="--loop-scale-pct:${scalePct}%">${svg}</div></div>`;
     return `${overview}${example}${diagram}`;
   }
@@ -139,7 +140,8 @@
     if(!arr.length) return '<p>—</p>';
     return arr.map(it=>{
       const title = formatMonthDay(it.date)||'export.milestone';
-      return `<h3>${escapeHtml(title)}</h3><p>${escapeHtml(it.notes||'')}</p>`;
+      // return `<h3>${escapeHtml(title)}</h3><p>${escapeHtml(it.notes||'')}</p>`; -- ORIGINAL
+      return `<h3>${escapeHtml(title)}</h3><p>${parseMarkdown(it.notes||'')}</p>`;
     }).join('');
   }
   function renderTeamJam(d){
@@ -274,7 +276,8 @@
       export: (d, entry) => {
         const groups = entry.groups || [];
         if (!groups.length) return '<p>—</p>';
-        return groups.map(g => `<div class="feature-block"><h3>${escapeHtml(g.title)}</h3><p>${escapeHtml(d[g.key]||'')}</p></div>`).join('');
+        //  return groups.map(g => `<div class="feature-block"><h3>${escapeHtml(g.title)}</h3><p>${escapeHtml(d[g.key]||'')}</p></div>`).join(''); -- ORIGINAL
+        return groups.map(g => `<div class="feature-block"><h3>${escapeHtml(g.title)}</h3><p>${parseMarkdown(d[g.key]||'')}</p></div>`).join('');
       }
     },
     review_export: {
