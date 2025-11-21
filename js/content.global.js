@@ -144,6 +144,7 @@
       return `<h3>${escapeHtml(title)}</h3><p>${parseMarkdown(it.notes||'')}</p>`;
     }).join('');
   }
+  /* -- ORIGINAL
   function renderTeamJam(d){
     const list = Array.isArray(d.teamMembers) ? d.teamMembers : [];
     const items = list.filter(x => String(x?.member||'').trim() || String(x?.role||'').trim());
@@ -159,6 +160,27 @@
     });
     return `<p class="team-line">${escapeHtml(parts.join(' | '))}</p>`;
   }
+  */
+    function renderTeamJam(d){
+        const list = Array.isArray(d.teamMembers) ? d.teamMembers : [];
+        const items = list.filter(x => String(x?.member||'').trim() || String(x?.role||'').trim());
+        if (items.length === 0){
+            const fb = String(d.team||'').trim();
+            if (fb) return `<p>${parseMarkdown(fb)}</p>`;
+            return '<p>—</p>';
+        }
+        // Each team member gets their own paragraph, format: "Member - Role"
+        return items.map(it => {
+            const r = String(it.role||'').trim();
+            const m = String(it.member||'').trim();
+            if (r && m) {
+                return `<p><strong>${parseMarkdown(m)}</strong> - ${parseMarkdown(r)}</p>`;
+            }
+            // If only one field is filled, show just that field
+            return `<p>${parseMarkdown(r || m || '—')}</p>`;
+        }).join('');
+    }
+    
   function renderAssets(d){
     return P3Key('export.engineVersion', d.engineVersion)
          + P3Key('export.pluginsTools', d.pluginsTools)
