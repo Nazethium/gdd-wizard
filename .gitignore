@@ -1,0 +1,27 @@
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*~
+
+# Node modules (if you ever add npm later)
+node_modules/
+
+# Build outputs (if applicable)
+dist/
+build/

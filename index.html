@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="./assets/Icon.png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>app.title</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <script src="https://cdn.counter.dev/script.js" data-id="b4202385-bd19-42aa-9c57-c8a91816e1d6" data-utcoffset="-8"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="brand">
+        <!-- Studio Erza logo with link (left) -->
+        <a href="https://studio-erza.itch.io" target="_blank" rel="noopener" class="brand-logo">
+          <img id="studioLogo" alt="alt.studioLogo" src="./assets/Erza_Logo_Pink.png" />
+        </a>
+
+        <!-- Title block (right) -->
+        <div class="brand-text">
+          <div class="title" data-i18n="header.title" id="app-title">header.title</div>
+          <div class="desc" data-i18n="header.tagline.short">header.tagline.short</div>
+          <div class="desc" data-i18n="header.tagline.long">header.tagline.long</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <button class="secondary" id="btnExportJSON" data-i18n="btn.exportSave">btn.exportSave</button>
+        <input type="file" id="importJSON" accept="application/json" style="display:none" />
+        <button class="secondary" id="btnImportJSON" data-i18n="btn.importSave">btn.importSave</button>
+        <button class="secondary" id="btnReset" data-i18n="btn.reset">btn.reset</button>
+        <button id="btnPrintHeader" data-i18n="btn.print">btn.print</button>
+        <!-- Language selector (no hardcoded options) -->
+        <select id="langSelect" aria-label="lang.selector" class="secondary"></select>
+      </div>
+    </header>
+
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="progress" aria-label="aria.progress"><div id="progressBar"></div></div>
+        <nav class="steps" id="steps"></nav>
+      </aside>
+
+      <main class="main">
+        <section class="card">
+          <div id="fields" class="fields single"></div>
+          <div class="actions">
+            <button id="prevBtn" class="secondary" data-i18n="btn.prev">btn.prev</button>
+            <button id="nextBtn" data-i18n="btn.next">btn.next</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="printView"></div>
+
+  <!-- Optional footer logo for printed pages -->
+  <script>
+    window.FOOTER_LOGO_URL = "./assets/Erza_Logo_Black.png";
+  </script>
+  <!-- Classic scripts that work from file:// -->
+  <!-- Markdown library for parsing user content -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+  <script src="./js/content.global.js"></script>
+  <script src="./js/engine.global.js"></script>
+  <script src="./i18n/i18n.global.js"></script>
+  <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js");
+    });
+  }
+  </script>
+
+<!-- Auto-insert version beside title (more reliable) -->
+<script>
+window.addEventListener("load", async () => {
+  const versionKey = "gddw-version";
+
+  async function getVersion() {
+    try {
+      const res = await fetch("./sw.js", { cache: "no-store" });
+      const text = await res.text();
+      const match = text.match(/gddw-v\d+\.\d+\.\d+/); // ← fixed regex
+      if (match) {
+        const version = match[0];
+        localStorage.setItem(versionKey, version);
+        return version;
+      }
+    } catch {
+      return localStorage.getItem(versionKey);
+    }
+    return localStorage.getItem(versionKey);
+  }
+
+  const version = await getVersion();
+  if (version) {
+    const cleanVersion = version.replace("gddw-", "");
+    document.title = `GDD Wizard ${cleanVersion}`;
+  }
+});
+</script>
+
+<script>
+window.addEventListener("load", async () => {
+  const versionKey = "gddw-version";
+
+  async function getVersion() {
+    try {
+      const res = await fetch("./sw.js", { cache: "no-store" });
+      const text = await res.text();
+      const match = text.match(/gddw-v\d+\.\d+\.\d+/);
+      if (match) {
+        const version = match[0];
+        localStorage.setItem(versionKey, version);
+        return version;
+      }
+    } catch {
+      return localStorage.getItem(versionKey);
+    }
+    return localStorage.getItem(versionKey);
+  }
+
+  const version = await getVersion();
+  if (version) {
+    const cleanVersion = version.replace("gddw-", "");
+    const baseTitle = "GDD Wizard";
+    const fullTitle = `${baseTitle} ${cleanVersion}`;
+    document.title = fullTitle;
+
+    // Watch for any code that changes the title later
+    const observer = new MutationObserver(() => {
+      if (!document.title.includes(cleanVersion)) {
+        document.title = fullTitle;
+      }
+    });
+    observer.observe(document.querySelector("title"), { childList: true });
+  }
+});
+</script>
+
+</body>
+</html>
